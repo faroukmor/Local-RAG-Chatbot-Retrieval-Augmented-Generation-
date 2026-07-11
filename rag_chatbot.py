@@ -79,4 +79,4 @@ while True:
     response = ollama.chat(model=MODEL_NAME, messages=messages)
     model_response = response['message']['content']
 
-    print(f"🤖 المساعد:\n{model_response}")
+    print(f"المساعد:\n{model_response}")
