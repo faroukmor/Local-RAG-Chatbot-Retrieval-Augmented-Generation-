@@ -2,8 +2,6 @@ import numpy as np
 import urllib.request
 import json
 
-
-
 def get_embedding(text):
     url = "http://localhost:11434/api/embeddings"
     data = json.dumps({"model": "nomic-embed-text", "prompt": text}).encode('utf-8')
@@ -20,7 +18,7 @@ def get_embedding(text):
     except Exception as e:
         print(f"Error: {e}")
 
-def cosine_similarity(v1, v2):
+def cosine_similarity(v1, v2): # CS(v1, v2) = v1 . v2 / ||v1|| × ||v2||
     dot_product = np.dot(v1, v2)
     norm1 = np.linalg.norm(v1)
     norm2 = np.linalg.norm(v2)
