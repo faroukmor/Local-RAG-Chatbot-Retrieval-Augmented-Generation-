@@ -1,28 +1,18 @@
 import numpy as np
 import urllib.request
 import json
-"""
-سنقوم بعمل متغير يحمل اكبر تشابه 
-ومتغير يحمل النص الخاص به 
-ثم نبدا اللوب
-في كل مرة ناخذ النص كويري_امبدد نقارنه مع نولدج_امبدد في الخطوة تلك
-اذا وجدنا تشابه اكبر نضعه في المتغير الاول
-اذا لم نجد ننتقل للخطوة التي بعدها حتى ينتهي اللوب
- ثم ناخذ جملة اكبر تشابه نطعمها للموديل وهو يجيب 
-"""
+
+
 
 def get_embedding(text):
-    # 2. إعداد الطلب لخادم Ollama المحلي
     url = "http://localhost:11434/api/embeddings"
     data = json.dumps({"model": "nomic-embed-text", "prompt": text}).encode('utf-8')
 
-    # 3. إرسال الطلب
     try:
         req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'})
         with urllib.request.urlopen(req) as response:
             result = json.loads(response.read().decode('utf-8'))
             
-            # 4. استخراج الإحداثيات
             embedding = result["embedding"]
             
             return np.array(embedding)
@@ -30,7 +20,6 @@ def get_embedding(text):
     except Exception as e:
         print(f"Error: {e}")
 
-# دالة التشابه التي كتبناها سابقاً (انسخها هنا)
 def cosine_similarity(v1, v2):
     dot_product = np.dot(v1, v2)
     norm1 = np.linalg.norm(v1)
@@ -55,11 +44,8 @@ folder_path = Path("knowledge")
 knowledge_base = load_data(folder_path)
 
 def get_closed_word(user_input):
-    # 2. إحداثيات سؤال المستخدم الوهمي
     query_embed = get_embedding(user_input)
 
-    # ---------------------------------------------------------
-    # 3. منطقك الذي شرحته: المتغيرات، الـ Loop، والشرط
     max_similarity = -1.0
     closed_word = ""
 
@@ -69,16 +55,14 @@ def get_closed_word(user_input):
             max_similarity = similarity
             closed_word = knowledge[0]
     return closed_word
-    # ---------------------------------------------------------
 
 import ollama
 
 MODEL_NAME = 'qwen2.5:3b'
 
-
 while True:
-    user_input = input("👤 أنت:")
-    if user_input == "exit": break
+    user_input = input("انت (للخروج اكتب اخرج):")
+    if user_input == "اخرج": break
     closed_word = get_closed_word(user_input)
 
     messages = [
